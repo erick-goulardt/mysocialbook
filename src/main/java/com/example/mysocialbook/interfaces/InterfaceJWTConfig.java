@@ -1,4 +1,4 @@
-package com.example.mysocialbook.security;
+package com.example.mysocialbook.interfaces;
 
 public interface InterfaceJWTConfig {
     String generateToken(String userId);
