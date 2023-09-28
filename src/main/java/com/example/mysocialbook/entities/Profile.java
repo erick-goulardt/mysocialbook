@@ -7,12 +7,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Document
+@Document(collection = "profiles")
 @Data @AllArgsConstructor
 public class Profile {
     @Id
@@ -27,7 +28,8 @@ public class Profile {
     private Set<String> friends = new HashSet<>();
     @NotBlank
     private String description;
-
+    @DBRef
+    private Set<Role> roles = new HashSet<>();
     public Profile() {
 
     }

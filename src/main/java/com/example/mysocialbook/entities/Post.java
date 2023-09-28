@@ -11,7 +11,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 import java.util.List;
 
-@Data @Document @AllArgsConstructor
+@Data
+@Document(collection = "posts")
+@AllArgsConstructor
 public class Post {
     @Id
     private String id;
