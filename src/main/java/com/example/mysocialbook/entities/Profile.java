@@ -33,7 +33,7 @@ public class Profile {
     public Profile() {
 
     }
-    public Profile(String username, String email, String password) {
+    public Profile(String username, String email, String password, String description, String urlAvatar) {
         this.username = username;
         this.email = email;
         this.password = password;

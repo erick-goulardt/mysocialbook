@@ -15,4 +15,6 @@ public interface ProfileRepository extends MongoRepository<Profile, String> {
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+
+    void save(Optional<Profile> user);
 }
