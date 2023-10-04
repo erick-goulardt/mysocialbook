@@ -10,6 +10,7 @@ import com.example.mysocialbook.repositories.RoleRepository;
 import com.example.mysocialbook.security.JwtUtils;
 import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -128,35 +129,38 @@ public class ProfileService {
         }
     }
 
-    public void addFriend(String currentUserId, String friendId) {
-        Optional<Profile> user = profileRepository.findById(currentUserId);
-        Optional<Profile> friend = profileRepository.findById(friendId);
+    public boolean followFriend(String profileId, String friendId) {
+        Profile profile = profileRepository.findById(profileId).orElse(null);
+        Profile friendProfile = profileRepository.findById(friendId).orElse(null);
 
-        if (user.get().getFriends().contains(friendId)) {
-            removeFriend(currentUserId, friendId);
-            return;
+        if (profile == null || friendProfile == null) {
+            return false;
+        }
+        if (profile.getFriends().contains(friendId)) {
+            return false;
         }
 
-        if (currentUserId.equals(friendId)) {
-            throw new IllegalArgumentException("You cannot follow yourself.");
-        }
+        profile.getFriends().add(friendId);
+        profileRepository.save(profile);
 
-        user.get().getFriends().add(friendId);
-        friend.get().getFriends().add(currentUserId);
-
-        profileRepository.save(user);
-        profileRepository.save(friend);
+        return true;
     }
 
-    public void removeFriend(String currentUserId, String friendId) {
-        Optional<Profile> user = profileRepository.findById(currentUserId);
-        Optional<Profile> friend = profileRepository.findById(friendId);
+    public boolean unfollowFriend(String profileId, String friendId) {
+        Profile profile = profileRepository.findById(profileId).orElse(null);
+        Profile friendProfile = profileRepository.findById(friendId).orElse(null);
 
-        user.get().getFriends().remove(friendId);
-        friend.get().getFriends().remove(currentUserId);
+        if (profile == null || friendProfile == null) {
+            return false;
+        }
+        if (profile.getFriends().contains(friendId)) {
+            return false;
+        }
 
-        profileRepository.save(user);
-        profileRepository.save(friend);
+        profile.getFriends().remove(friendId);
+        profileRepository.save(profile);
+
+        return true;
     }
 
     public boolean areFriends(String currentUserId, String friendId) {

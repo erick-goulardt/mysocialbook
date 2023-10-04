@@ -6,6 +6,7 @@ import com.example.mysocialbook.security.JwtUtils;
 import com.example.mysocialbook.services.ProfileService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -47,35 +48,25 @@ public class ProfileController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/addFriend")
-    public ResponseEntity<String> addFriend(@RequestParam String friendId, Authentication authentication) {
-        String token = jwtUtils.generateJwtToken(authentication);
-        String currentUserId = profileService.getUserById(jwtUtils.getUserNameFromJwtToken(token)).get().getId();
+    @PostMapping("/followFriend/{profileId}/{friendId}")
+    public ResponseEntity<String> followFriend(@PathVariable String profileId, @PathVariable String friendId) {
+        boolean success = profileService.followFriend(profileId, friendId);
 
-        try {
-            profileService.addFriend(currentUserId, friendId);
-            return ResponseEntity.ok("Friend added successfully.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        if (success) {
+            return new ResponseEntity<>("Amigo seguido com sucesso", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Não foi possível seguir o amigo", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/removeFriend")
-    public ResponseEntity<String> removeFriend(@RequestParam String friendId, Authentication authentication) {
-        String token = jwtUtils.generateJwtToken(authentication);
-        String currentUserId = profileService.getUserById(jwtUtils.getUserNameFromJwtToken(token)).get().getId();
+    @PostMapping("/removeFriend/{profileId}/{friendId}")
+    public ResponseEntity<String> removeFriend(@PathVariable String friendId, @PathVariable String profileId) {
+        boolean success = profileService.unfollowFriend(profileId, friendId);
 
-        profileService.removeFriend(currentUserId, friendId);
-        return ResponseEntity.ok("Friend removed successfully.");
+        if (success) {
+            return new ResponseEntity<>("Amigo desseguido com sucesso", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Não foi possível desseguir o amigo", HttpStatus.BAD_REQUEST);
+        }
     }
-
-    @GetMapping("/areFriends")
-    public ResponseEntity<Boolean> areFriends(@RequestParam String friendId, Authentication authentication) {
-        String token = jwtUtils.generateJwtToken(authentication);
-        String currentUserId = profileService.getUserById(jwtUtils.getUserNameFromJwtToken(token)).get().getId();
-
-        boolean areFriends = profileService.areFriends(currentUserId, friendId);
-        return ResponseEntity.ok(areFriends);
-    }
-
 }

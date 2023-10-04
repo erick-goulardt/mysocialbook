@@ -1,12 +1,16 @@
 package com.example.mysocialbook.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +18,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Document(collection = "profiles")
-@Data @AllArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Profile {
     @Id
     private String id;
@@ -26,6 +32,8 @@ public class Profile {
     private String password;
     private String urlAvatar;
     private Set<String> friends = new HashSet<>();
+    @DBRef @JsonManagedReference
+    private Set<Post> posts = new HashSet<>();
     @NotBlank
     private String description;
     @DBRef
@@ -37,5 +45,7 @@ public class Profile {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.description = description;
+        this.urlAvatar = urlAvatar;
     }
 }

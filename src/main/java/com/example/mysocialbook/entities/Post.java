@@ -1,24 +1,28 @@
 package com.example.mysocialbook.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Getter @Setter
 @Document(collection = "posts")
 @AllArgsConstructor
 public class Post {
     @Id
     private String id;
-    @NotNull
-    private String profileId;
+    @DBRef @JsonBackReference
+    private Profile profile;
     @NotBlank
     private String subject;
     private List<String> likes;
@@ -29,6 +33,6 @@ public class Post {
     public Post() {
 
     }
-    public Post(String profileId, String subject) {
+    public Post(String profileId, String subject, String title) {
     }
 }
