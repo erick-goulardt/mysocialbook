@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.container-home {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.container-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    flex-direction: column;
+}
+
+.container-image {
+    width: 50%;
+}
+
+.container-image img {
+    width: 100%;
+    margin-top: -6em;
+}
+
+
+.container-header-title img {
+    margin-left: 5px;
+}
+
+.container-header-title {
+    margin-bottom: 60px;
+    margin-top: -5rem;
+}
+
+.input-form {
+    padding: 10px;
+    width: 20rem;
+    margin-left: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: solid 1px rgb(170, 169, 169);
+}
+.label-form {
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+.insert-button {
+    padding: 15px;
+    background-color: #F37671;
+    box-shadow: 0px 4px 21px -4px rgba(0, 0, 0, 0.40);
+    border-radius: 10px;
+    border: none;
+    width: 20rem;
+    margin-left: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.forget-password-container {
+    display: flex;
+    margin-bottom: 10px;
+    width: 20rem;
+    justify-content: space-between;
+    margin-left: 5px;
+}
+
+.forget-password-container input[type="checkbox"] {
+    border-color: #F37671;
+    margin-right: 10px;
+}
+
+.forget-password-container a {
+    color: rgb(170, 169, 169);
+}
+
+.login-text {
+    width: 20rem;
+    margin-left: 5px;
+    margin-bottom: 50px;
+}
