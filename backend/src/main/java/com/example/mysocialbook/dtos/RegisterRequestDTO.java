@@ -10,7 +10,7 @@ public class RegisterRequestDTO {
     private String username;
     private String password;
     private String description;
-    private String avatarUrl;
+    private String number;
     private Set<String> roles;
 
 }
