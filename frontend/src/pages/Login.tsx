@@ -5,20 +5,36 @@ import { Form } from "react-bootstrap";
 import "../css/login.style.css";
 import Title from "../assets/homelogo.svg";
 import Icon from "../assets/homeicon.svg";
+import { useAuth } from "../auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-const LoginComponent = () => {
+export function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login: authLogin } = useAuth();
+   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const response = await login(username, password);
-      console.log("Login successful", response);
+      if (response) {
+        authLogin(response.data);
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        navigate('/profile')
+        console.log("Login successful", response);
+      }
     } catch (error) {
+      setError(true)
       console.error("Login failed", error);
     }
-  };
 
+    setTimeout(() => {
+      setError(false);
+    }, 2250);
+  };
+  
   return (
     <div className="container-home">
       <div className="container-form">
@@ -28,12 +44,12 @@ const LoginComponent = () => {
         </div>
         <h3 className="login-text">Faça seu Login</h3>
         <div className="container-input">
-          <p className="label-form">Email</p>
+          <p className="label-form">Username</p>
           <Form.Control
             className="input-form"
             type="text"
-            id="nome"
-            placeholder="Digite seu e-mail"
+            id="username"
+            placeholder="Digite seu username"
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
@@ -46,6 +62,7 @@ const LoginComponent = () => {
             placeholder="Digite sua senha"
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && <p className="error-message">Usuário ou senha errados!</p> }
         </div>
         <div className="forget-password-container">
           <div className="check-style">
@@ -66,6 +83,5 @@ const LoginComponent = () => {
       </div>
     </div>
   );
-};
+}
 
-export default LoginComponent;

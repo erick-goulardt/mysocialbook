@@ -6,7 +6,7 @@ export async function login(username: string, password: string) {
       `/auth/signin`,
       { username, password }
     );
-    console.log(data)
+
     return data;
   } catch (error) {
     console.error(error);
@@ -14,20 +14,16 @@ export async function login(username: string, password: string) {
   }
 }
 
-/*
-  export async function getRepositories(username: string, page: number) {
-    try {
-      const perPage = 3; 
-      const { data } = await API.get(`/${username}/repos`, {
-        params: {
-          page,
-          per_page: perPage,
-        },
-      });
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
-    
+export async function register(username: string, password: string, description: string, number: number, avatarUrl: string, name: string, email: string) {
+  try {
+    const data = await API.post(
+      `/auth/signup`,
+      { username, password, description, number, avatarUrl, name, email }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
-  */
+}
+
