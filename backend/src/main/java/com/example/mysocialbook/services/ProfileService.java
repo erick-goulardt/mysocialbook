@@ -8,10 +8,7 @@ import com.example.mysocialbook.interfaces.ConstantRole;
 import com.example.mysocialbook.repositories.ProfileRepository;
 import com.example.mysocialbook.repositories.RoleRepository;
 import com.example.mysocialbook.security.JwtUtils;
-import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -69,23 +66,12 @@ public class ProfileService {
 
         Profile profile = new Profile(request.getUsername(),
                 request.getEmail(),
-                encoder.encode(request.getPassword()), request.getDescription(), request.getAvatarUrl());
+                encoder.encode(request.getPassword()), request.getDescription(), request.getAvatarUrl(), request.getName(), request.getNumber());
 
-
-        Set<String> strRoles = request.getRoles();
         Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null || strRoles.isEmpty()) {
-            Role userRole = roleRepository.findByRole(ConstantRole.USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Default Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                Role existingRole = roleRepository.findByRole(role.toUpperCase())
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                roles.add(existingRole);
-            });
-        }
+        Role role = new Role();
+        role.setRole(ConstantRole.USER);
+        roles.add(role);
 
         profile.setRoles(roles);
         profileRepository.save(profile);
@@ -118,6 +104,8 @@ public class ProfileService {
         if(optionalUser.isPresent()) {
             Profile profile = optionalUser.get();if(request.getUsername() != null && !request.getUsername().isEmpty()) profile.setUsername(request.getUsername());
             if(request.getEmail() != null && !request.getEmail().isEmpty()) profile.setEmail(request.getEmail());
+            if(request.getName() != null && !request.getName().isEmpty()) profile.setName(request.getName());
+            if(request.getNumber() != null) profile.setNumber(request.getNumber());
             if(request.getDescription() != null && !request.getDescription().isEmpty()) profile.setDescription(request.getDescription());
             if(request.getPassword() != null && !request.getPassword().isEmpty()) profile.setPassword(encoder.encode(request.getPassword()));
             if(request.getAvatarUrl() != null && !request.getAvatarUrl().isEmpty()) profile.setUrlAvatar(request.getAvatarUrl());

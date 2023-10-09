@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.NumberFormat;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +20,7 @@ import java.util.Set;
 public class Profile {
     @Id
     private String id;
+    private String name;
     @NotNull
     private String username;
     @NotNull @Email
@@ -35,18 +33,20 @@ public class Profile {
     private Set<Post> posts = new HashSet<>();
     @NotBlank
     private String description;
-    @DBRef
     private Set<Role> roles = new HashSet<>();
     @Min(9) @Max(13)
-    private String number;
+    private Long number;
     public Profile() {
 
     }
-    public Profile(String username, String email, String password, String description, String urlAvatar) {
+    public Profile(String username, String email, String password, String description, String urlAvatar, String name, Long number) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.description = description;
         this.urlAvatar = urlAvatar;
+        this.name = name;
+        this.number = number;
     }
+
 }

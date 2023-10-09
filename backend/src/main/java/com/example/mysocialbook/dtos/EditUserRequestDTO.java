@@ -9,5 +9,6 @@ public class EditUserRequestDTO {
     private String password;
     private String avatarUrl;
     private String description;
-    private String number;
+    private Long number;
+    private String name;
 }

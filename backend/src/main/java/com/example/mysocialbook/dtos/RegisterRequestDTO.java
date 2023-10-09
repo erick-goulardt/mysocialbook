@@ -7,10 +7,11 @@ import java.util.Set;
 @Data
 public class RegisterRequestDTO {
     private String email;
+    private String name;
     private String username;
     private String password;
     private String description;
-    private String number;
-    private Set<String> roles;
+    private String avatarUrl;
+    private Long number;
 
 }
