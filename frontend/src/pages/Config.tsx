@@ -1,13 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/config.style.css"
+import { deleteProfile } from "../api/profile.service";
+import { useAuth } from "../auth/AuthProvider";
 
 export function Config() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const user = useAuth();
 
   const handleDeleteProfile = () => {
-    setIsModalOpen(false);
+    if(user.user?.id) {
+      deleteProfile(user.user.id)
+      setIsModalOpen(false);
+      navigate("/")
+    }
+    
   };
 
   const toggleModal = () => {

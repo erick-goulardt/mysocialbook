@@ -78,6 +78,7 @@
 .image-profile {
     width: 300px;
     height: 300px;
+    border-radius: 50%;
 }
 .data {
     padding: 10px;
@@ -95,13 +96,76 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    overflow-y: scroll; 
+    overflow-y: auto; 
     height: 60%;
+  }
+
+  .icon-list {
+    width: 29px;
+    height: 29px;
+    border-radius: 50%;
   }
 
   .grid img {
     width: 450px;
     max-width: 100%;
     padding: 10px;
-    height: 300px;
+    height: 350px;
   }
+
+  .modal-buttons input {
+    margin-top: 15px;
+    border: none;
+    border-bottom: 1px solid grey;
+    width: 320px;
+  }
+
+  .modal-buttons button {
+    margin-top: 15px;
+    border: none;
+    border-bottom: 1px solid grey;
+    width: 150px;
+  }
+
+  .modal-buttons input:focus {
+    box-shadow: 0 0 0 0;
+    border-bottom: 1px solid grey;
+    outline: 0;
+}
+
+.modal-buttons button {
+  margin-left: 5px;
+  margin-top: 20px;
+}
+.modal-buttons input {
+  padding-bottom: 5px;
+}
+
+.add-friend {
+  margin-top: 20px;
+  background-color: #F37671;
+  color: white;
+  border: none;
+  padding: 5px 25px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.create-button {
+  margin-top: 20px;
+  background-color: #F37671;
+  color: white;
+  border: none;
+  padding: 5px 25px;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 100px;
+}
+
+.modal-input input{
+  margin-bottom: 10px;
+}
+
+.modal {
+  width: 150px;
+}

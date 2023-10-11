@@ -1,13 +1,18 @@
-//import { useAuth } from "../auth/AuthProvider";
+
+import { useAuth } from "../auth/AuthProvider";
 import { useState } from "react";
 import "../css/edit.style.css";
 import { useNavigate } from "react-router-dom";
+import { editProfile } from "../api/profile.service";
 export function Edit() {
-  //const user = useAuth();
+  const user = useAuth();
   const navigate = useNavigate();
+
   const returnBack = () => {
-    navigate("/profile/config")
+    navigate("/profile/config");
   };
+
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -30,16 +35,22 @@ export function Edit() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    const requestData = {
+      name: formData.name,
+      number: formData.phoneNumber,
+      email: formData.email,
+      username: formData.username,
+      description: formData.description,
+      urlAvatar: formData.imageUrl,
+      password: formData.password,
+    };
+
     e.preventDefault();
-    setFormData({
-      name: "",
-      phoneNumber: 0,
-      email: "",
-      username: "",
-      description: "",
-      imageUrl: "",
-      password: "",
-    });
+    if(user.user?.id) {
+      editProfile(user.user?.id, requestData);
+    navigate("/profile");
+    }
+    
   };
 
   return (

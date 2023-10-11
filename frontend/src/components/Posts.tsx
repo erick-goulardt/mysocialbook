@@ -1,5 +1,5 @@
 interface PostProps {
-  imageUrl: string;
+  imageUrl?: string;
 }
 
 export function Post({ imageUrl }: PostProps) {

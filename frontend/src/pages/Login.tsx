@@ -26,13 +26,14 @@ export function Login() {
         console.log("Login successful", response);
       }
     } catch (error) {
-      setError(true)
+      setTimeout(() => {
+        setError(true);
+      }, 2250);
       console.error("Login failed", error);
     }
 
-    setTimeout(() => {
-      setError(false);
-    }, 2250);
+    
+
   };
   
   return (

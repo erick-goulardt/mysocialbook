@@ -1,0 +1,18 @@
+.post img {
+width: 400px;
+height: 400px;
+margin-bottom: 30px;
+}
+
+.feed {
+    overflow-y: auto;
+    width: 54%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-deco {
+    width: 20px;
+}
