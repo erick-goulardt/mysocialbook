@@ -26,7 +26,7 @@ public class PostController {
     @Autowired
     private PostRepository postRepository;
     @PostMapping("/create/{profileId}")
-    public ResponseEntity<String> createPost(@PathVariable String profileId, @RequestBody PostRequestDTO postRequest) {
+    public ResponseEntity<PostRequestDTO> createPost(@PathVariable String profileId, @RequestBody PostRequestDTO postRequest) {
         Optional<Profile> optionalProfile = profileRepository.findById(profileId);
 
         if (optionalProfile.isPresent()) {
@@ -36,14 +36,20 @@ public class PostController {
             post.setSubject(postRequest.getDescription());
             post.setTitle(postRequest.getTitle());
             post.setUrlImage(postRequest.getPhotoUrl());
-            post.setCreated(LocalDate.now());
             postRepository.save(post);
             optionalProfile.get().getPosts().add(post);
             profileRepository.save(profile);
+
+            PostRequestDTO createdPost = new PostRequestDTO();
+            createdPost.setTitle(post.getTitle());
+            createdPost.setDescription(post.getSubject());
+            createdPost.setPhotoUrl(post.getUrlImage());
+
+            return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>("Algo de errado com o post", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("Post criado com sucesso", HttpStatus.CREATED);
+
     }
 
     @DeleteMapping("/delete/{postId}")
@@ -89,6 +95,7 @@ public class PostController {
 
         Set<String> friendIds = profile.getFriends();
         Set<Post> friendsPosts = postRepository.findByProfileIdIn(friendIds);
+        friendsPosts.forEach(System.out::println);
 
         Set<PostResponseDTO> postResponses = friendsPosts.stream()
                 .map(PostResponseDTO::mapToResponse)

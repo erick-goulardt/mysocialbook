@@ -1,6 +1,7 @@
 package com.example.mysocialbook.services;
 
 import com.example.mysocialbook.dtos.*;
+import com.example.mysocialbook.entities.Post;
 import com.example.mysocialbook.entities.Profile;
 import com.example.mysocialbook.entities.Role;
 import com.example.mysocialbook.entities.UserDetailsImpl;
@@ -19,10 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,7 +100,8 @@ public class ProfileService {
         Optional<Profile> optionalUser = profileRepository.findById(id);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5);
         if(optionalUser.isPresent()) {
-            Profile profile = optionalUser.get();if(request.getUsername() != null && !request.getUsername().isEmpty()) profile.setUsername(request.getUsername());
+            Profile profile = optionalUser.get();
+            if(request.getUsername() != null && !request.getUsername().isEmpty()) profile.setUsername(request.getUsername());
             if(request.getEmail() != null && !request.getEmail().isEmpty()) profile.setEmail(request.getEmail());
             if(request.getName() != null && !request.getName().isEmpty()) profile.setName(request.getName());
             if(request.getNumber() != null) profile.setNumber(request.getNumber());
@@ -117,22 +116,57 @@ public class ProfileService {
         }
     }
 
-    public boolean followFriend(String profileId, String friendId) {
+    public void followFriend(String profileId, String friendId) {
         Profile profile = profileRepository.findById(profileId).orElse(null);
         Profile friendProfile = profileRepository.findById(friendId).orElse(null);
 
-        if (profile == null || friendProfile == null) {
-            return false;
+        if (profile != null && friendProfile != null) {
+            profile.getFriends().add(friendId);
+            profileRepository.save(profile);
+        } else {
+            throw new IllegalArgumentException("Perfil ou amigo não encontrado.");
         }
-        if (profile.getFriends().contains(friendId)) {
-            return false;
-        }
-
-        profile.getFriends().add(friendId);
-        profileRepository.save(profile);
-
-        return true;
     }
+
+    public List<Post> getFriendPosts(String profileId) {
+        Profile profile = profileRepository.findById(profileId).orElse(null);
+
+        if (profile != null) {
+
+            Set<String> friendIds = profile.getFriends();
+
+            List<Post> friendPosts = new ArrayList<>();
+            for (String friendId : friendIds) {
+                Profile friendProfile = profileRepository.findById(friendId).orElse(null);
+                if (friendProfile != null) {
+                    friendPosts.addAll(friendProfile.getPosts());
+                }
+            }
+            return friendPosts;
+        } else {
+            throw new IllegalArgumentException("Perfil não encontrado.");
+        }
+    }
+
+    public List<Profile> getFriendsList(String profileId) {
+        Profile profile = profileRepository.findById(profileId).orElse(null);
+
+        if (profile != null) {
+            Set<String> friendIds = profile.getFriends();
+
+            List<Profile> friendsList = new ArrayList<>();
+            for (String friendId : friendIds) {
+                Profile friendProfile = profileRepository.findById(friendId).orElse(null);
+                if (friendProfile != null) {
+                    friendsList.add(friendProfile);
+                }
+            }
+            return friendsList;
+        } else {
+            throw new IllegalArgumentException("Perfil não encontrado.");
+        }
+    }
+
 
     public boolean unfollowFriend(String profileId, String friendId) {
         Profile profile = profileRepository.findById(profileId).orElse(null);
@@ -151,10 +185,6 @@ public class ProfileService {
         return true;
     }
 
-    public boolean areFriends(String currentUserId, String friendId) {
-        Optional<Profile> user = profileRepository.findById(currentUserId);
-        return user.get().getFriends().contains(friendId);
-    }
 
     public List<Profile> getAllProfiles() {
         return profileRepository.findAll();
@@ -168,6 +198,9 @@ public class ProfileService {
         profileRepository.deleteById(id);
     }
 
+    public Optional<Profile> searchByUsername(String username) {
+        return profileRepository.findByUsername(username);
+    }
 
 }
 

@@ -44,6 +44,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestDTO loginRequest) {
+        System.out.println(profileRepository.findByUsername("gougou").get().getFriends().toString());
         var response = profileService.login(loginRequest);
         return ResponseEntity.status(200).body(response);
     }
